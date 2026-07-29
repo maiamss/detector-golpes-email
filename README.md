@@ -1,6 +1,6 @@
 # Backend — Sistema de Detecção de Golpes Bancários via E-mail
 
-Backend do TCC **"Sistema Web para Detecção e Alerta de Golpes Bancários via
+Backend do **"Sistema Web para Detecção e Alerta de Golpes Bancários via
 E-mail utilizando Processamento de Linguagem Natural e Classificação
 Supervisionada"**.
 
@@ -10,7 +10,7 @@ risco com explicação dos padrões detectados.
 
 ---
 
-## Arquitetura (visão geral do TCC)
+## Arquitetura (visão geral)
 
 ```
 Usuário → extensão de navegador → [requisição HTTP] → API (este backend)
@@ -87,19 +87,6 @@ baseada em busca de palavras-chave (urgência, solicitação de dados, links).
 Isso existe só para o backend funcionar de ponta a ponta (extensão ↔ API)
 enquanto o modelo de verdade não está pronto.
 
-**Quando o modelo real chegar:**
-
-1. Colocar os arquivos entregues (ex: `modelo.pkl`, `vectorizer.pkl`) na
-   pasta `model_files/`.
-2. Reescrever a função `classificar_email()` em `classifier.py` para:
-   - Carregar o modelo e o vetorizador (uma vez, na inicialização, não a
-     cada requisição).
-   - Aplicar o mesmo pré-processamento usado no treino.
-   - Rodar a predição e montar o `EmailAnaliseResponse`.
-3. Manter a assinatura da função (`str` → `EmailAnaliseResponse`) para não
-   quebrar o restante da API.
-
----
 
 ## Contrato JSON da API
 
@@ -160,36 +147,3 @@ deploy está de pé.
 | `VECTORIZER_PATH`   | `model_files/vectorizer.pkl`        | Caminho do vetorizador TF-IDF                 |
 | `MODEL_VERSION`     | `mock_v0`                            | Identificador da versão do modelo em uso      |
 | `ALLOWED_ORIGINS`   | `*`                                   | Origens permitidas por CORS (ajustar no deploy)|
-
-Para configurar localmente, crie um arquivo `.env` na raiz de `backend/`
-(não versionar, adicionar ao `.gitignore`).
-
----
-
-## Deploy (gratuito)
-
-Sugestão: **Render (free tier)**.
-
-1. Subir o repositório no GitHub.
-2. Criar um "Web Service" no Render apontando para a pasta `backend/`.
-3. Comando de build: `pip install -r requirements.txt`
-4. Comando de start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Configurar as variáveis de ambiente da tabela acima no painel do Render.
-
-⚠️ No plano gratuito o serviço "dorme" após ~15 min sem uso e demora para
-"acordar" na primeira requisição seguinte — normal, não é bug.
-
-⚠️ Se o modelo escolhido for **DistilBERT**, validar se o free tier
-(RAM/CPU) aguenta o carregamento do modelo antes de depender dele na
-apresentação do TCC.
-
----
-
-## Próximos passos (checklist do backend)
-
-- [ ] Alinhar com quem treina o modelo: formato de entrega do `.pkl`/pesos
-- [ ] Trocar o mock em `classifier.py` pelo modelo real
-- [ ] Adicionar `model_files/` ao `.gitignore` se os arquivos forem grandes
-- [ ] Ajustar `ALLOWED_ORIGINS` para a origem real da extensão antes do deploy
-- [ ] Testar o endpoint `/analisar-email` com e-mails reais do dataset
-- [ ] Medir `tempo_inferencia_ms` com o modelo real (não só o mock)
