@@ -7,17 +7,16 @@ Usa variáveis de ambiente para não deixar valores fixos no código
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent  # raiz do projeto
+APP_DIR = Path(__file__).resolve().parent.parent            # app/
 
-# Caminho do modelo treinado. Quando o modelo real chegar, basta
-# colocar o arquivo em backend/model_files/ e ajustar o nome aqui,
-# ou sobrescrever via variável de ambiente MODEL_PATH.
-MODEL_PATH = os.getenv("MODEL_PATH", str(BASE_DIR / "model_files" / "modelo.pkl"))
-VECTORIZER_PATH = os.getenv(
-    "VECTORIZER_PATH", str(BASE_DIR / "model_files" / "vectorizer.pkl")
-)
+MODELS_DIR = APP_DIR / "models"
 
-MODEL_VERSION = os.getenv("MODEL_VERSION", "mock_v0")
+# Caminhos dos artefatos do modelo. Sobrescrevíveis via variável de
+# ambiente para facilitar deploy (ex: montar volume separado).
+MODEL_PATH = os.getenv("MODEL_PATH", str(MODELS_DIR / "modelo_logistico.pkl"))
+VECTORIZER_PATH = os.getenv("VECTORIZER_PATH", str(MODELS_DIR / "tfidf.pkl"))
 
-# Origens permitidas (CORS). Em produção, trocar "*" pela URL/ID da extensão.
+MODEL_VERSION = os.getenv("MODEL_VERSION", "logreg_v1")
+
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")

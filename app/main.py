@@ -69,7 +69,7 @@ def health_check():
 @app.post(
     "/analisar-email",
     response_model=EmailAnaliseResponse,
-    responses={400: {"model": ErroResponse}},
+    responses={400: {"model": ErroResponse}, 503: {"model": ErroResponse}},
     tags=["Classificação"],
     summary="Analisa um e-mail e retorna o nível de risco de golpe",
 )
@@ -84,5 +84,16 @@ def analisar_email(payload: EmailAnaliseRequest):
             },
         )
 
-    resultado = classificar_email(payload.email_text)
+    try:
+        resultado = classificar_email(payload.email_text)
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "erro": True,
+                "codigo": "MODELO_INDISPONIVEL",
+                "mensagem": str(e),
+            },
+        )
+
     return resultado
