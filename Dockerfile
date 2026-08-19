@@ -1,7 +1,5 @@
-# 1. Usa uma imagem oficial do Python como base
 FROM python:3.11-slim
 
-# 2. Define a pasta de trabalho dentro do contêiner
 WORKDIR /app
 
 # 3. Copia o arquivo de dependências para o contêiner
@@ -13,5 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 5. Copia todo o resto do seu código para dentro do contêiner
 COPY . .
 
-# 6. Define o comando padrão para executar seu script
-CMD ["python", "main.py"]
+# 6. Expõe a porta usada pelo uvicorn
+EXPOSE 8000
+
+# 7. Sobe a API com uvicorn (app/main.py define o objeto `app`)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
