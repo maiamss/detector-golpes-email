@@ -80,6 +80,51 @@ python -m pytest tests/ -v
 
 ---
 
+## Como rodar com Docker
+
+```bash
+docker build -t detector-golpes-email .
+docker run -d -p 8000:8000 --name detector detector-golpes-email
+```
+
+A API sobe em `http://localhost:8000` (mesmos endpoints `/docs`, `/redoc`,
+`/health` etc. descritos acima).
+
+Se a porta 8000 já estiver em uso na sua máquina, mapeie para outra porta:
+
+```bash
+docker run -d -p 8001:8000 --name detector detector-golpes-email
+```
+
+### Comandos úteis
+
+```bash
+docker ps                        # containers rodando
+docker logs -f detector          # ver logs em tempo real
+docker stop detector              # parar
+docker rm -f detector             # parar e remover de uma vez
+```
+
+Para rebuildar depois de alterar o código:
+
+```bash
+docker rm -f detector 2>/dev/null; docker build -t detector-golpes-email . && docker run -d -p 8000:8000 --name detector detector-golpes-email
+```
+
+### Rodando os testes com Docker
+
+`pytest` e `httpx` não fazem parte da imagem final (não estão no
+`requirements.txt`, só são usados em desenvolvimento). Para rodar os testes
+sem instalar nada localmente, suba um container avulso que instala e roda:
+
+```bash
+docker run --rm detector-golpes-email sh -c "pip install pytest httpx && python -m pytest tests/ -v"
+```
+
+`--rm` remove o container assim que os testes terminam.
+
+---
+
 ## Estado atual: modelo mockado
 
 O arquivo `app/services/classifier.py` contém uma lógica **provisória**
