@@ -11,8 +11,12 @@ Redoc (documentação alternativa) em:
     http://localhost:8000/redoc
 """
 
+import logging
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
+logger = logging.getLogger("uvicorn")
 
 from app.models.schemas import (
     EmailAnaliseRequest,
@@ -74,6 +78,11 @@ def health_check():
     summary="Analisa um e-mail e retorna o nível de risco de golpe",
 )
 def analisar_email(payload: EmailAnaliseRequest):
+    logger.info(
+        "Recebido -> remetente=%r assunto=%r texto=%r",
+        payload.sender, payload.email_subject, payload.email_text,
+    )
+
     if not payload.email_text or not payload.email_text.strip():
         raise HTTPException(
             status_code=400,
