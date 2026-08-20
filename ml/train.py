@@ -37,8 +37,8 @@ def treinar_regressao_logistica(X_train, y_train):
 
 def treinar_random_forest(X_train, y_train):
     modelo = RandomForestClassifier(
-        n_estimators=200,
-        max_depth=None,
+        n_estimators=100,
+        max_depth=20,
         class_weight="balanced",
         random_state=42,
         n_jobs=-1,
