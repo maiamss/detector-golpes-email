@@ -4,11 +4,10 @@ pydantic==2.10.4
 spacy==3.8.3
 nltk==3.9.1
 
-# Descomentar quando o modelo real for integrado:
-# scikit-learn==1.6.0
-# pandas==2.2.3
-# numpy==2.2.1
-# joblib==1.4.2
+scikit-learn==1.6.0
+pandas==2.2.3
+numpy==2.2.1
+joblib==1.4.2
 
 # Descomentar apenas se o modelo escolhido for DistilBERT:
 # transformers==4.47.1
