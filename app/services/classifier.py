@@ -106,8 +106,12 @@ def _analisar_remetente(sender: str | None) -> float:
     ajuste = 0.0
 
     # domínio gratuito tentando se passar por instituição
-    dominios_gratuitos = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com"]
-    palavras_bancarias = ["banco", "bank", "itau", "bradesco", "santander", "caixa", "nubank"]
+    dominios_gratuitos = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "aol.com", "mail.com", "protonmail.com"]
+    palavras_bancarias = [
+        "bank", "chase", "wellsfargo", "bankofamerica", "citibank",
+        "paypal", "amex", "americanexpress", "capitalone",
+        "hsbc", "barclays", "lloyds",
+    ]
 
     if any(p in sender_lower for p in palavras_bancarias) and \
        any(d in sender_lower for d in dominios_gratuitos):
