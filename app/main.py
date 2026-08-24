@@ -94,7 +94,7 @@ def analisar_email(payload: EmailAnaliseRequest):
         )
 
     try:
-        resultado = classificar_email(payload.email_text)
+        resultado = classificar_email(payload.email_text, email_subject =payload.email_subject, sender=payload.sender,)
     except RuntimeError as e:
         raise HTTPException(
             status_code=503,

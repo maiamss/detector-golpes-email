@@ -12,6 +12,7 @@ import time
 import logging
 
 import joblib
+import re
 
 from app.models.schemas import EmailAnaliseResponse, PadraoDetectado, NivelRisco
 from app.core.config import MODEL_PATH, VECTORIZER_PATH, MODEL_VERSION
@@ -92,38 +93,61 @@ def _extrair_padroes(texto_lower: str) -> list[PadraoDetectado]:
 
     return padroes
 
-
-def classificar_email(email_text: str) -> EmailAnaliseResponse:
+def _analisar_remetente(sender: str | None) -> float:
     """
-    Recebe o texto do e-mail e retorna a análise de risco usando o
-    modelo real (TF-IDF + Regressão Logística, por padrão).
-
-    Contrato mantido: input string -> output EmailAnaliseResponse,
-    igual ao mock anterior, para não quebrar app/main.py nem os testes.
+    Heurística leve sobre o remetente. Retorna um ajuste (0 a ~0.15)
+    a ser somado ao score do modelo. Não usa ML porque o dataset de
+    treino não tem remetente confiável — isso é regra, não predição.
     """
+    if not sender:
+        return 0.0
+
+    sender_lower = sender.lower()
+    ajuste = 0.0
+
+    # domínio gratuito tentando se passar por instituição
+    dominios_gratuitos = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com"]
+    palavras_bancarias = ["banco", "bank", "itau", "bradesco", "santander", "caixa", "nubank"]
+
+    if any(p in sender_lower for p in palavras_bancarias) and \
+       any(d in sender_lower for d in dominios_gratuitos):
+        ajuste += 0.15  # nome de banco em domínio gratuito = bandeira vermelha
+
+    # muitos números/caracteres estranhos no domínio (típico de spoofing)
+    dominio = sender_lower.split("@")[-1] if "@" in sender_lower else ""
+    if re.search(r"\d{3,}", dominio):
+        ajuste += 0.05
+
+    return ajuste
+
+
+def classificar_email(email_text: str, email_subject: str | None = None,
+                       sender: str | None = None) -> EmailAnaliseResponse:
     inicio = time.perf_counter()
 
     if not _modelo_esta_carregado():
-        # Sem modelo carregado, não tem como classificar de verdade.
-        # Quem decide o que fazer com isso é o endpoint (main.py),
-        # aqui só sinalizamos via exceção.
-        raise RuntimeError(
-            "Modelo não carregado. Verifique MODEL_PATH e VECTORIZER_PATH."
-        )
+        raise RuntimeError("Modelo não carregado. Verifique MODEL_PATH e VECTORIZER_PATH.")
 
-    texto_lower = email_text.lower()
+    # monta o mesmo formato usado no treino: assunto + corpo
+    texto_completo = f"{email_subject or ''} {email_text}".strip()
+    texto_lower = texto_completo.lower()
 
-    # Mesmo pipeline de limpeza usado no treino (ml/train.py ->
-    # preprocess_batch), para não haver distância entre treino e inferência.
-    texto_limpo = preprocess_text(email_text)
+    texto_limpo = preprocess_text(texto_completo)
     X = _vectorizer.transform([texto_limpo])
 
-    # predict_proba retorna [P(classe=0), P(classe=1)]; assumimos que
-    # label 1 == golpe/phishing, conforme o dataset usado no treino.
     proba = _modelo.predict_proba(X)[0]
-    score = float(proba[1])
+    score_modelo = float(proba[1])
+
+    ajuste_remetente = _analisar_remetente(sender)
+    score = min(score_modelo + ajuste_remetente, 1.0)
 
     padroes = _extrair_padroes(texto_lower)
+    if ajuste_remetente > 0:
+        padroes.append(PadraoDetectado(
+            tipo="remetente_suspeito",
+            descricao="Remetente com características suspeitas (domínio/nome)",
+            trecho=sender,
+        ))
 
     if score >= 0.6:
         risco = NivelRisco.alto
