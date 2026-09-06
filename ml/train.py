@@ -3,37 +3,40 @@ import pandas as pd
 import joblib
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
-from app.services.preprocess import preprocess_batch
+from app.services.preprocess import preprocess_batch, build_feature_matrix
 from ml.metrics import avaliar_modelo
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # raiz do projeto
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.path.join(BASE_DIR, "app", "models")
 DATA_PATH = os.path.join(BASE_DIR, "data", "phishing_email.csv")
 
 os.makedirs(MODELS_DIR, exist_ok=True)
 
+
 def carregar_dados(path: str = DATA_PATH) -> pd.DataFrame:
     df = pd.read_csv(path)
-    df = df.dropna(subset=["text_combined", "label"]) 
+    df = df.dropna(subset=["text_combined", "label"])
     df = df.drop_duplicates(subset=["text_combined"])
-    return df 
-
-def preparar_dados(df: pd.DataFrame): #recebe um DataFrame
-    print(f"Pré-processando {len(df)} e-mails... (pode demorar um pouco)")
-    df = df.copy()
-    df["text_clean"] = preprocess_batch(df["text_combined"].tolist()) 
     return df
 
+
+def preparar_dados(df: pd.DataFrame):
+    print(f"Pré-processando {len(df)} e-mails... (pode demorar um pouco)")
+    df = df.copy()
+    df["text_clean"] = preprocess_batch(df["text_combined"].tolist())
+    return df
+
+
 def treinar_regressao_logistica(X_train, y_train):
-    modelo = LogisticRegression(
-        max_iter=1000,
-        class_weight="balanced")
+    modelo = LogisticRegression(max_iter=1000, class_weight="balanced")
     modelo.fit(X_train, y_train)
     return modelo
+
 
 def treinar_random_forest(X_train, y_train):
     modelo = RandomForestClassifier(
@@ -46,8 +49,8 @@ def treinar_random_forest(X_train, y_train):
     modelo.fit(X_train, y_train)
     return modelo
 
-def main():
 
+def main():
     df = carregar_dados()
     print(f"Dataset carregado: {len(df)} linhas.")
 
@@ -57,18 +60,30 @@ def main():
     df.to_csv(clean_path, index=False)
     print(f"Dataset limpo salvo em {clean_path}")
 
-    X = df["text_clean"]
+    # texto cru (para features extras) e texto limpo (para TF-IDF) precisam
+    # estar alinhados pelo mesmo split, por isso split é feito nos índices
+    textos_raw = df["text_combined"].tolist()
+    textos_clean = df["text_clean"].tolist()
     y = df["label"]
-    X_train_text, X_test_text, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+
+    idx_train, idx_test, y_train, y_test = train_test_split(
+        df.index, y, test_size=0.2, random_state=42, stratify=y
     )
 
+    raw_train = df.loc[idx_train, "text_combined"].tolist()
+    raw_test = df.loc[idx_test, "text_combined"].tolist()
+    clean_train = df.loc[idx_train, "text_clean"].tolist()
+    clean_test = df.loc[idx_test, "text_clean"].tolist()
+
     vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
-    X_train = vectorizer.fit_transform(X_train_text)
-    X_test = vectorizer.transform(X_test_text)
+    scaler = MinMaxScaler()
+
+    X_train = build_feature_matrix(raw_train, clean_train, vectorizer, scaler, fit=True)
+    X_test = build_feature_matrix(raw_test, clean_test, vectorizer, scaler, fit=False)
 
     joblib.dump(vectorizer, os.path.join(MODELS_DIR, "tfidf.pkl"))
-    print("Vectorizer salvo em models/tfidf.pkl")
+    joblib.dump(scaler, os.path.join(MODELS_DIR, "scaler.pkl"))
+    print("Vectorizer e scaler salvos em app/models/")
 
     print("\n=== Treinando Regressão Logística ===")
     modelo_log = treinar_regressao_logistica(X_train, y_train)
@@ -81,6 +96,7 @@ def main():
     joblib.dump(modelo_rf, os.path.join(MODELS_DIR, "modelo_random_forest.pkl"))
 
     print("\nTreinamento concluído. Modelos salvos em /models.")
+
 
 if __name__ == "__main__":
     main()

@@ -1,11 +1,5 @@
 """
 Serviço responsável por classificar o e-mail.
-
-Usa o modelo real treinado em ml/train.py (TF-IDF + Regressão Logística
-por padrão, configurável via MODEL_PATH). A extração de padrões
-(`explicacao`) continua baseada em palavras-chave, pois serve como
-camada de interpretabilidade complementar à predição do modelo —
-o modelo dá o score, as regras explicam o "porquê" para o usuário final.
 """
 
 import time
@@ -15,97 +9,77 @@ import joblib
 import re
 
 from app.models.schemas import EmailAnaliseResponse, PadraoDetectado, NivelRisco
-from app.core.config import MODEL_PATH, VECTORIZER_PATH, MODEL_VERSION
-from app.services.preprocess import preprocess_text
+from app.core.config import MODEL_PATH, VECTORIZER_PATH, SCALER_PATH, MODEL_VERSION
+from app.services.preprocess import preprocess_text, build_feature_matrix
 
 logger = logging.getLogger(__name__)
 
-# Palavras-chave usadas apenas para gerar a explicação exibida ao usuário.
-# Não influenciam o score, que agora vem do modelo real.
-PALAVRAS_URGENCIA = ["urgente", "24 horas", "imediatamente", "bloqueada", "bloqueado"]
-PALAVRAS_DADOS = ["atualizar seus dados", "confirme seus dados", "regularize"]
-PALAVRAS_LINK = ["clique aqui", "http://", "https://"]
+PALAVRAS_URGENCIA = ["urgent", "24 hours", "immediately", "suspended", "expire"]
+PALAVRAS_DADOS = ["verify your account", "confirm your details", "update your information"]
+PALAVRAS_LINK = ["click here", "http://", "https://"]
 
 
 def _carregar_artefatos():
-    """
-    Carrega modelo e vectorizer uma única vez, na importação do módulo.
-    Se algo falhar (arquivo ausente, .pkl corrompido), o serviço continua
-    de pé — /health vai reportar modelo_carregado=False e /analisar-email
-    retorna erro 503 em vez de derrubar a API inteira.
-    """
     try:
         modelo = joblib.load(MODEL_PATH)
         vectorizer = joblib.load(VECTORIZER_PATH)
-        logger.info("Modelo e vectorizer carregados com sucesso (%s).", MODEL_VERSION)
-        return modelo, vectorizer
+        scaler = joblib.load(SCALER_PATH)
+        logger.info("Modelo, vectorizer e scaler carregados com sucesso (%s).", MODEL_VERSION)
+        return modelo, vectorizer, scaler
     except FileNotFoundError as e:
-        logger.error("Arquivo de modelo/vectorizer não encontrado: %s", e)
+        logger.error("Arquivo de modelo/vectorizer/scaler não encontrado: %s", e)
     except Exception as e:
-        logger.exception("Falha ao carregar modelo/vectorizer: %s", e)
-    return None, None
+        logger.exception("Falha ao carregar artefatos: %s", e)
+    return None, None, None
 
 
-_modelo, _vectorizer = _carregar_artefatos()
+_modelo, _vectorizer, _scaler = _carregar_artefatos()
 
 
 def _modelo_esta_carregado() -> bool:
-    """Usado pelo endpoint /health para reportar o estado real do modelo."""
-    return _modelo is not None and _vectorizer is not None
+    return _modelo is not None and _vectorizer is not None and _scaler is not None
 
 
 def _extrair_padroes(texto_lower: str) -> list[PadraoDetectado]:
-    """Camada de explicabilidade baseada em regras (não afeta o score)."""
     padroes: list[PadraoDetectado] = []
 
     for palavra in PALAVRAS_URGENCIA:
         if palavra in texto_lower:
-            padroes.append(
-                PadraoDetectado(
-                    tipo="urgencia_artificial",
-                    descricao="Uso de expressão de urgência",
-                    trecho=palavra,
-                )
-            )
+            padroes.append(PadraoDetectado(
+                tipo="urgencia_artificial",
+                descricao="Uso de expressão de urgência",
+                trecho=palavra,
+            ))
             break
 
     for palavra in PALAVRAS_DADOS:
         if palavra in texto_lower:
-            padroes.append(
-                PadraoDetectado(
-                    tipo="solicitacao_dados",
-                    descricao="Solicitação de atualização de dados sensíveis",
-                    trecho=palavra,
-                )
-            )
+            padroes.append(PadraoDetectado(
+                tipo="solicitacao_dados",
+                descricao="Solicitação de atualização de dados sensíveis",
+                trecho=palavra,
+            ))
             break
 
     for palavra in PALAVRAS_LINK:
         if palavra in texto_lower:
-            padroes.append(
-                PadraoDetectado(
-                    tipo="link_suspeito",
-                    descricao="Presença de link na mensagem",
-                    trecho=palavra,
-                )
-            )
+            padroes.append(PadraoDetectado(
+                tipo="link_suspeito",
+                descricao="Presença de link na mensagem",
+                trecho=palavra,
+            ))
             break
 
     return padroes
 
+
 def _analisar_remetente(sender: str | None) -> float:
-    """
-    Heurística leve sobre o remetente. Retorna um ajuste (0 a ~0.15)
-    a ser somado ao score do modelo. Não usa ML porque o dataset de
-    treino não tem remetente confiável — isso é regra, não predição.
-    """
     if not sender:
         return 0.0
 
     sender_lower = sender.lower()
     ajuste = 0.0
 
-    # domínio gratuito tentando se passar por instituição
     dominios_gratuitos = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "aol.com", "mail.com", "protonmail.com"]
     palavras_bancarias = [
         "bank", "chase", "wellsfargo", "bankofamerica", "citibank",
@@ -115,9 +89,8 @@ def _analisar_remetente(sender: str | None) -> float:
 
     if any(p in sender_lower for p in palavras_bancarias) and \
        any(d in sender_lower for d in dominios_gratuitos):
-        ajuste += 0.15  # nome de banco em domínio gratuito = bandeira vermelha
+        ajuste += 0.15
 
-    # muitos números/caracteres estranhos no domínio (típico de spoofing)
     dominio = sender_lower.split("@")[-1] if "@" in sender_lower else ""
     if re.search(r"\d{3,}", dominio):
         ajuste += 0.05
@@ -130,14 +103,20 @@ def classificar_email(email_text: str, email_subject: str | None = None,
     inicio = time.perf_counter()
 
     if not _modelo_esta_carregado():
-        raise RuntimeError("Modelo não carregado. Verifique MODEL_PATH e VECTORIZER_PATH.")
+        raise RuntimeError("Modelo não carregado. Verifique MODEL_PATH, VECTORIZER_PATH e SCALER_PATH.")
 
-    # monta o mesmo formato usado no treino: assunto + corpo
     texto_completo = f"{email_subject or ''} {email_text}".strip()
     texto_lower = texto_completo.lower()
-
     texto_limpo = preprocess_text(texto_completo)
-    X = _vectorizer.transform([texto_limpo])
+
+    # mesma combinação TF-IDF + features extras usada no treino
+    X = build_feature_matrix(
+        texts_raw=[texto_completo],
+        texts_clean=[texto_limpo],
+        vectorizer=_vectorizer,
+        scaler=_scaler,
+        fit=False,
+    )
 
     proba = _modelo.predict_proba(X)[0]
     score_modelo = float(proba[1])
