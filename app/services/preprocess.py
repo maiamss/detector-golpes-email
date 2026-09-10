@@ -92,6 +92,15 @@ def build_feature_matrix(texts_raw: list[str], texts_clean: list[str],
         X_tfidf = vectorizer.transform(texts_clean)
         extras_norm = scaler.transform(extras)
 
+    # O MinMaxScaler mapeia para [0, 1] a faixa que viu no treino, mas não
+    # limita valores fora dela: um e-mail em CAIXA ALTA tem proporção de
+    # maiúsculas de ~0,85 contra o máximo de 0,118 do treino, e sai do scaler
+    # como 7,2 — sete vezes além de qualquer coisa que o modelo ajustou.
+    # Multiplicado pelo peso negativo dessa coluna, isso zerava o score de
+    # golpes escritos em maiúsculas. O clip prende os valores na faixa
+    # treinada, para que uma feature fora de escala não domine a decisão.
+    extras_norm = np.clip(extras_norm, 0.0, 1.0)
+
     X_combined = hstack([X_tfidf, csr_matrix(extras_norm)])
     return X_combined
 
