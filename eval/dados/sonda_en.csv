@@ -1,0 +1,61 @@
+subject,body,sender,label
+Verify your email address,"Please confirm your email address to finish setting up your account. Click the button below to verify. If you did not create an account, you can ignore this message.",no-reply@github.com,0
+Your verification code,Your one-time verification code is 481920. It expires in 10 minutes. Do not share this code with anyone.,no-reply@accounts.google.com,0
+New sign-in to your account,"We noticed a new sign-in on a Windows device in Sao Paulo. If this was you, no action is needed. If not, secure your account from the security settings page.",security@google.com,0
+Password reset requested,"We received a request to reset the password for your account. The reset link is valid for 30 minutes. If you did not request this, no changes will be made.",support@dropbox.com,0
+Confirm your subscription,Thanks for signing up. Please confirm your subscription to start receiving our weekly digest. You can unsubscribe at any time.,news@substack.com,0
+Two-factor authentication enabled,Two-factor authentication was turned on for your account. From now on you will need your authenticator app to sign in.,no-reply@microsoft.com,0
+Your account has been updated,"The email address associated with your account was changed. If you did not make this change, contact our support team through the help center.",notifications@slack.com,0
+Device authorization required,A new device is trying to access your account. Approve or deny this request from the security section of the mobile app.,no-reply@apple.com,0
+Your order has shipped,Your order 114-2938471 has shipped and should arrive by Thursday. Track your package from Your Orders in the app.,ship-confirm@amazon.com,0
+Payment receipt,"This is a receipt for your monthly subscription of USD 12.00, charged to the card ending in 4412. No action is required.",billing@spotify.com,0
+Your monthly statement is available,Your statement for August is now available. Log in to your account to view and download it. We never ask for your password by email.,statements@chase.com,0
+Invoice 2026-0841,"Please find attached the invoice for services rendered in August, due on the 15th. Let me know if you need a purchase order number.",financeiro@fornecedor.com.br,0
+Booking confirmation,Your reservation at Hotel Aurora is confirmed for 14-16 October. Check-in from 3 PM. Free cancellation until 12 October.,reservations@booking.com,0
+Appointment reminder,This is a reminder of your appointment tomorrow at 9:30 AM. Reply CANCEL if you need to reschedule.,clinic@saudecenter.com.br,0
+Refund processed,We have processed your refund of USD 39.90. It should appear on your statement within 5 business days.,support@shopify.com,0
+Sprint retrospective Friday,"Hi team, our retrospective is Friday at 3 PM in room 3. Please bring your notes on what slowed us down this sprint.",mariana@empresa.com.br,0
+Re: contract review,Thanks for the redline. I agree with clauses 4 and 7. Can we get legal to look at clause 12 before Friday?,eduardo@parceiro.com,0
+Meeting notes attached,Attaching the notes from Monday. Action items are at the bottom. Let me know if I missed anything.,vinicius@empresa.com.br,0
+Server maintenance Saturday,Heads up: the staging server restarts Saturday from 2 to 5 AM. Save your work before then. Ping me on the channel if there are issues.,devops@empresa.com.br,0
+Welcome to the team,Welcome aboard. Your laptop will be ready Monday and IT will help you set up access. Looking forward to working together.,rh@empresa.com.br,0
+Conference schedule,The talk schedule is published. Your session is Thursday at 11 AM in the main hall. Speakers should arrive 20 minutes early.,organizers@devconf.org,0
+Library book due,The book you borrowed is due on 20 September. You can renew online if no one else has reserved it.,library@university.edu,0
+Newsletter: this week in security,"This week: a look at supply chain attacks, a new TLS draft, and three job openings from readers. Thanks for reading.",weekly@securitynews.io,0
+Your flight is tomorrow,Check-in is open for your flight LA4821 to Recife. Boarding starts at 6:10 AM at gate 12.,checkin@latam.com,0
+Gym membership renewal,Your annual membership renews on 1 October at the current rate. You can review or cancel it from your profile.,contato@academia.com.br,0
+Course certificate available,Congratulations on completing the course. Your certificate is available in your dashboard under Achievements.,no-reply@coursera.org,0
+Rent receipt August,Attached is the receipt for August rent. Thank you for the punctual payment.,proprietario@imobiliaria.com.br,0
+Peer review request,"Would you be available to review a submission for the workshop? It is 8 pages, deadline 30 September.",chair@workshop.org,0
+Exam results published,Your results are available in the student portal. Log in with the credentials you registered in person at the office.,secretaria@universidade.edu.br,0
+Coffee tomorrow?,"Hey, are you free for coffee tomorrow morning before the standup? There is a new place near the office.",ana@empresa.com.br,0
+Your account will be suspended,URGENT: unusual activity was detected. Your account will be suspended within 24 hours unless you verify your identity. Click here to confirm your details now.,security@chase-verify.tk,1
+Immediate action required,We were unable to validate your billing information. Update your information immediately or your service will be terminated. Click here to restore access.,billing@paypal-secure.info,1
+Mailbox storage full,Your mailbox has exceeded its storage quota and outgoing messages are blocked. Verify your account here within 24 hours to restore delivery.,admin@webmail-support.xyz,1
+Unusual sign-in blocked,"Someone tried to access your account from Russia. To secure your account, confirm your password and security questions using the secure form below.",alerts@microsoft-account.top,1
+Your password expires today,Company policy requires a password change today. Failure to update your information will lock you out of all systems. Click here to keep your current password.,it-helpdesk@company-portal.click,1
+Re-confirm your banking details,Our technical services department is carrying out a planned software upgrade. Please login to re-confirm your account details to avoid interruption.,service@wellsfargo.online,1
+Suspicious transaction on your card,"A transaction of USD 890.00 was attempted with your card. If you did not authorize it, verify your account immediately using the link below.",fraud@bankofamerica.gmail.com,1
+Session expired - verify now,Your online banking session has expired for security reasons. Re-enter your credentials to reactivate access to your funds immediately.,no-reply@hsbc-secure.cc,1
+Congratulations! You have won,"You have been selected in our annual customer draw and won USD 5,000. Confirm your details within 24 hours to claim your prize before it expires.",promotions@lucky-winner.top,1
+Business proposal - urgent and confidential,I am a consultant handling the estate of a deceased client. I need a trustworthy partner to receive USD 4.5 million. You will keep 20 percent. Send me your bank details to begin.,barrister.william@lawfirm-gh.info,1
+Tax refund pending,"The revenue service has approved a refund of USD 1,240 in your name. Provide your bank account and security code to receive the payment within 2 hours.",refunds@irs-treasury.win,1
+Inheritance claim notification,A distant relative has left funds in your name. Contact our office with a copy of your identification and bank information to process the transfer urgently.,claims@international-estate.info,1
+Your package could not be delivered,Delivery failed due to unpaid customs fees of USD 2.99. Pay the outstanding amount within 48 hours or the package will be returned to sender.,delivery@postal-service.click,1
+Cryptocurrency investment opportunity,Our automated trading system guarantees 300 percent returns in 30 days. Limited slots available. Send your initial deposit today and start earning immediately.,invest@crypto-profits.xyz,1
+Payment overdue - final notice,This is the final notice before legal action. Settle the outstanding invoice immediately using the updated bank details below to avoid court proceedings.,accounts@invoice-collections.top,1
+Loan pre-approved,"You have been pre-approved for a USD 25,000 loan with no credit check. Confirm your details and pay the processing fee to release the funds today.",loans@fastcash-approval.win,1
+Quick favor - are you at your desk?,I am in a meeting and cannot talk. I need you to purchase five gift cards of USD 200 each for a client. Send me the codes as soon as you have them. Keep this confidential.,ceo.director@company-exec.info,1
+Updated bank account for payroll,Please note that my bank account has changed. Update my payroll details to the account below before the next payment run. Confirm once done.,employee.name@personal-mail.top,1
+Job offer - work from home,"Your profile was selected for a remote position paying USD 4,500 monthly. To complete registration, send a copy of your ID and a refundable training fee of USD 89.",hr@remote-careers.click,1
+Invoice attached - please process,Attached is the invoice for last month. Note our banking details have changed. Please use the new account for this and all future payments.,finance@supplier-invoices.info,1
+Microsoft support - virus detected,Our systems detected malicious software on your computer. Install the remote assistance tool attached so our technician can remove the infection immediately.,support@microsoft-helpdesk.xyz,1
+Document shared with you,A confidential document was shared with you. Sign in with your email credentials to view it. Access expires in 24 hours.,sharing@docs-secure-view.top,1
+Your subscription payment failed,We could not charge your card and your account will be closed. Click here to update your payment information and keep your subscription active.,billing@netflix-account.cc,1
+Charity appeal - urgent,Families affected by the recent disaster need your help today. Send your contribution directly to the account below. Every hour counts.,donations@relief-fund-now.win,1
+Court summons notification,You are required to appear in court. Download the attached summons and confirm your personal details immediately to avoid a warrant.,notifications@court-summons.info,1
+Social security number suspended,Your social security number has been suspended due to suspicious activity. Call the number below immediately and confirm your identity to reactivate it.,alerts@ssa-verification.top,1
+Free antivirus - limited offer,Your computer is at risk. Download our premium antivirus free for 12 months. Click here to install before the offer expires tonight.,offers@antivirus-premium.click,1
+Verify your wallet,Suspicious activity was detected on your crypto wallet. Confirm your seed phrase using the secure form to prevent unauthorized withdrawals.,security@wallet-protect.xyz,1
+Urgent: update your information,Failure to update your information within 24 hours will result in permanent account closure. Click here to avoid losing access to your funds.,noreply@secure-bank-update.tk,1
+You have 1 pending message,A secure message is waiting for you. Verify your account to read it. This message will be deleted in 24 hours.,messages@secure-portal.info,1

@@ -1,2 +1,19 @@
-# no .gitignore, remova ou comente:
-# app/models/*.pkl
+venv/
+__pycache__/
+__pycache__
+*.pyc
+.pytest_cache/
+.env
+
+# Datasets baixados e saidas de avaliacao (refazeis, dezenas de MB)
+data/
+eval/dados/*.parquet
+eval/dados/externo_limpo.csv
+eval/dados/zenodo_validation*.csv
+eval/dados/Phishing_validation_emails.csv
+eval/dados/hf_*.csv
+eval/saida/
+
+# Os .pkl de app/models/ NAO entram aqui de proposito: o Dockerfile os copia
+# no build (COPY . .). Se forem ignorados, a imagem sobe sem modelo e o
+# /health passa a responder modelo_carregado: false.
