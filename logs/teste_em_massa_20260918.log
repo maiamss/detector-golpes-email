@@ -1,0 +1,12 @@
+2026-09-18 20:25:18 | INFO | Carregando vectorizer e scaler...
+2026-09-18 20:25:19 | INFO | Recriando o conjunto de teste (mesmo split usado no treino)...
+2026-09-18 20:25:20 | INFO | Conjunto de teste: 16416 e-mails (8569 golpe, 7847 legítimo)
+2026-09-18 20:25:22 | INFO | === Testando: Regressão Logística ===
+2026-09-18 20:25:23 | INFO | === Testando: Random Forest ===
+2026-09-18 20:25:24 | INFO | === Testando: MLP ===
+2026-09-18 20:25:24 | INFO | === Testando: Regressão Logística (Optuna) ===
+2026-09-18 20:25:24 | INFO | === Testando: Random Forest (Optuna) ===
+2026-09-18 20:25:25 | INFO | === Testando: MLP (Optuna) ===
+2026-09-18 20:25:25 | INFO | Relatório comparativo salvo em /Users/eduardafbz/Documents/tcc-phishing/logs/relatorio_teste_em_massa.csv
+2026-09-18 20:25:25 | INFO | Resumo em texto salvo em /Users/eduardafbz/Documents/tcc-phishing/logs/relatorio_teste_em_massa.txt
+2026-09-18 20:25:25 | INFO | Melhor modelo: MLP (Optuna) (score_medio_vp_vn=0.9884)

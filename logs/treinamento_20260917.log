@@ -1,0 +1,10 @@
+2026-09-17 20:22:27 | INFO | Dataset carregado: 82078 linhas.
+2026-09-17 20:22:27 | INFO | Pré-processando 82078 e-mails... (pode demorar um pouco)
+2026-09-17 20:35:34 | INFO | Dataset limpo salvo em /Users/eduardafbz/Documents/tcc-phishing/data/phishing_email_clean.csv
+2026-09-17 20:35:51 | INFO | Vectorizer e scaler salvos em app/models/
+2026-09-17 20:35:51 | INFO | === Treinando Regressão Logística ===
+2026-09-17 20:35:52 | INFO | === Treinando Random Forest ===
+2026-09-17 20:35:54 | INFO | === Treinando MLP (rede neural) ===
+2026-09-17 20:36:34 | INFO | Treinamento concluído. Modelos salvos em app/models/.
+2026-09-17 20:36:34 | INFO | Histórico de experimentos atualizado em logs/historico_experimentos.csv
+2026-09-17 20:45:45 | INFO | Pré-processando 82078 e-mails... (pode demorar um pouco)

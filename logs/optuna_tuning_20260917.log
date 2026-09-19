@@ -1,0 +1,13 @@
+2026-09-17 20:59:08 | INFO | === Optuna: otimizando logreg (30 trials) ===
+2026-09-17 21:00:29 | INFO | Melhor score (CV) para logreg: 0.9835
+2026-09-17 21:00:29 | INFO | Melhores hiperparâmetros: {'C': 7.62933302772016, 'solver': 'liblinear'}
+2026-09-17 21:00:30 | INFO | Histórico de trials salvo em /Users/eduardafbz/Documents/tcc-phishing/logs/optuna_trials_logreg.csv
+2026-09-17 21:00:31 | INFO | === Optuna: otimizando rf (30 trials) ===
+2026-09-17 21:15:58 | INFO | Melhor score (CV) para rf: 0.9711
+2026-09-17 21:15:58 | INFO | Melhores hiperparâmetros: {'n_estimators': 100, 'max_depth': 40, 'min_samples_split': 15, 'min_samples_leaf': 1}
+2026-09-17 21:15:58 | INFO | Histórico de trials salvo em /Users/eduardafbz/Documents/tcc-phishing/logs/optuna_trials_rf.csv
+2026-09-17 21:16:04 | INFO | === Optuna: otimizando mlp (30 trials) ===
+2026-09-18 02:19:08 | INFO | Melhor score (CV) para mlp: 0.9852
+2026-09-18 02:19:08 | INFO | Melhores hiperparâmetros: {'hidden_layer_sizes': (100,), 'alpha': 0.0017219423165822998, 'learning_rate_init': 0.009220786055335505, 'activation': 'relu', 'solver': 'adam'}
+2026-09-18 02:19:08 | INFO | Histórico de trials salvo em /Users/eduardafbz/Documents/tcc-phishing/logs/optuna_trials_mlp.csv
+2026-09-18 02:20:25 | INFO | Tuning concluído. Veja logs/historico_experimentos.csv para comparar tudo.

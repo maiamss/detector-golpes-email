@@ -1,0 +1,14 @@
+RELATÓRIO DE TESTE EM MASSA — DETECÇÃO DE GOLPES EM E-MAIL
+============================================================
+
+Conjunto de teste: 16416 e-mails (8569 golpe, 7847 legítimo)
+
+                      modelo  accuracy  score_medio_vp_vn  recall_golpe  precision_golpe  f1_golpe  recall_legitimo  precision_legitimo  f1_legitimo  precision_weighted  recall_weighted  f1_weighted  suporte_golpe  suporte_legitimo
+         Regressão Logística  0.980324           0.980171      0.983662         0.978751  0.981200         0.976679            0.982060     0.979362            0.980333         0.980324     0.980322           8569              7847
+               Random Forest  0.953155           0.951714      0.984479         0.929894  0.956408         0.918950            0.981890     0.949378            0.954749         0.953155     0.953048           8569              7847
+                         MLP  0.986842           0.986505      0.994165         0.980887  0.987481         0.978845            0.993533     0.986134            0.986931         0.986842     0.986837           8569              7847
+Regressão Logística (Optuna)  0.985319           0.985095      0.990197         0.981833  0.985997         0.979992            0.989195     0.984572            0.985352         0.985319     0.985316           8569              7847
+      Random Forest (Optuna)  0.975816           0.975020      0.993115         0.961799  0.977206         0.956926            0.992204     0.974246            0.976333         0.975816     0.975791           8569              7847
+                MLP (Optuna)  0.988670           0.988374      0.995099         0.983393  0.989211         0.981649            0.994577     0.988071            0.988739         0.988670     0.988666           8569              7847
+
+Melhor modelo (por score_medio_vp_vn): MLP (Optuna) (0.9884)

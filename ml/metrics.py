@@ -4,6 +4,16 @@ from sklearn.metrics import (
 )
 
 
+def score_medio_vp_vn(y_true, y_pred) -> float:
+    cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
+    vn, fp, fn, vp = cm.ravel()
+
+    sensibilidade = vp / (vp + fn) if (vp + fn) > 0 else 0.0
+    especificidade = vn / (vn + fp) if (vn + fp) > 0 else 0.0
+
+    return (sensibilidade + especificidade) / 2
+
+
 def avaliar_modelo(modelo, X_test, y_test, nome: str = "Modelo") -> dict:
     y_pred = modelo.predict(X_test)
 
@@ -16,8 +26,6 @@ def avaliar_modelo(modelo, X_test, y_test, nome: str = "Modelo") -> dict:
     }
 
     # métricas por classe (0 = legítimo, 1 = golpe/phishing)
-    # assume-se esse mapeamento pois é o padrão usado no dataset e no
-    # score do classifier.py (proba[1] = probabilidade de golpe).
     precisao_classe, recall_classe, f1_classe, suporte_classe = precision_recall_fscore_support(
         y_test, y_pred, labels=[0, 1], zero_division=0
     )
@@ -32,11 +40,15 @@ def avaliar_modelo(modelo, X_test, y_test, nome: str = "Modelo") -> dict:
     resultados["f1_golpe"] = f1_classe[1]
     resultados["suporte_golpe"] = int(suporte_classe[1])
 
+    # nova métrica: média entre sensibilidade (VP) e especificidade (VN)
+    resultados["score_medio_vp_vn"] = score_medio_vp_vn(y_test, y_pred)
+
     print(f"--- Resultados: {nome} ---")
     print(f"Accuracy: {resultados['accuracy']:.4f}")
     print(f"Precision (weighted): {resultados['precision_weighted']:.4f}")
     print(f"Recall (weighted): {resultados['recall_weighted']:.4f}")
     print(f"F1-score (weighted): {resultados['f1_weighted']:.4f}")
+    print(f"Score médio VP/VN (sensibilidade+especificidade / 2): {resultados['score_medio_vp_vn']:.4f}")
 
     print(f"\n--- Métricas por classe ---")
     print(f"{'Classe':<12}{'Precision':>12}{'Recall':>12}{'F1':>12}{'Suporte':>12}")
@@ -47,10 +59,6 @@ def avaliar_modelo(modelo, X_test, y_test, nome: str = "Modelo") -> dict:
           f"{resultados['recall_golpe']:>12.4f}{resultados['f1_golpe']:>12.4f}"
           f"{resultados['suporte_golpe']:>12d}")
 
-    # recall_golpe é a métrica mais crítica do produto: é a taxa de golpes
-    # que o sistema NÃO deixa passar. precision_legitimo é a segunda mais
-    # crítica: mede o quanto o sistema não está gritando "golpe" à toa
-    # para e-mails reais (o problema que apareceu no teste do "Chase").
     print(f"\n>> Recall na classe 'golpe' (taxa de detecção real): {resultados['recall_golpe']:.4f}")
     print(f">> Precision na classe 'legítimo' (confiabilidade dos negativos): {resultados['precision_legitimo']:.4f}")
 
