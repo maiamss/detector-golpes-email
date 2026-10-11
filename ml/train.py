@@ -15,7 +15,7 @@ from ml.logging_utils import configurar_logger, registrar_experimento
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.path.join(BASE_DIR, "app", "models")
-DATA_PATH = os.path.join(BASE_DIR, "data", "phishing_email.csv")
+DATA_PATH = os.path.join(BASE_DIR, "data", "phishing_email_augmented_v3.csv")
 
 os.makedirs(MODELS_DIR, exist_ok=True)
 

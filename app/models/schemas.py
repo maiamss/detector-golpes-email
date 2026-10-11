@@ -59,20 +59,3 @@ class HealthResponse(BaseModel):
     status: str = "ok"
     modelo_carregado: bool
     versao_modelo: Optional[str] = None
-
-import joblib, numpy as np
-from app.services.preprocess import preprocess_text   
-
-vec = joblib.load("app/models/tfidf.pkl")             
-clf = joblib.load("app/models/modelo_logistico.pkl")   
-
-for texto in ["Shall we meet for coffee tomorrow?",
-              "Hi, how are you? Shall we meet for coffee tomorrow? I was thinking about the place near the park, around three in the afternoon, if that works for you."]:
-    x = vec.transform([preprocess_text(texto)])
-    nomes = np.array(vec.get_feature_names_out())
-    contrib = x.toarray()[0] * clf.coef_[0][:x.shape[1]]
-    idx = np.argsort(-np.abs(contrib))[:8]
-    print(texto[:40], "| intercepto:", clf.intercept_[0].round(3))
-    for i in idx:
-        if contrib[i] != 0:
-            print(f"  {nomes[i]:<20} {contrib[i]:+.3f}")
