@@ -1,0 +1,41 @@
+id,rotulo,risco,score,classificacao,explicacao,modelo_usado,tempo_inferencia_ms
+G01,golpe,alto,0.9998,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'urgent'}, {'tipo': 'solicitacao_dados', 'descricao': 'Solicitação de atualização de dados sensíveis', 'trecho': 'verify your account'}, {'tipo': 'link_suspeito', 'descricao': 'Presença de link na mensagem', 'trecho': 'http://'}]",logreg_optuna_v1,17.4
+G02,golpe,alto,0.9968,golpe,"[{'tipo': 'solicitacao_dados', 'descricao': 'Solicitação de atualização de dados sensíveis', 'trecho': 'confirm your details'}, {'tipo': 'link_suspeito', 'descricao': 'Presença de link na mensagem', 'trecho': 'click here'}]",logreg_optuna_v1,8.04
+G03,golpe,alto,0.9866,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'expire'}]",logreg_optuna_v1,6.12
+G04,golpe,alto,0.9963,golpe,[],logreg_optuna_v1,13.59
+G05,golpe,alto,0.9657,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'immediately'}]",logreg_optuna_v1,4.07
+G06,golpe,alto,0.9995,golpe,[],logreg_optuna_v1,14.26
+G07,golpe,alto,0.9779,golpe,"[{'tipo': 'link_suspeito', 'descricao': 'Presença de link na mensagem', 'trecho': 'click here'}]",logreg_optuna_v1,3.7
+G08,golpe,alto,0.9995,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': '24 hours'}]",logreg_optuna_v1,4.09
+G09,golpe,alto,0.9705,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'immediately'}]",logreg_optuna_v1,5.53
+G10,golpe,baixo,0.0436,legitimo,[],logreg_optuna_v1,3.58
+G11,golpe,alto,0.9989,golpe,[],logreg_optuna_v1,3.89
+G12,golpe,alto,0.9995,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'immediately'}, {'tipo': 'solicitacao_dados', 'descricao': 'Solicitação de atualização de dados sensíveis', 'trecho': 'verify your account'}, {'tipo': 'link_suspeito', 'descricao': 'Presença de link na mensagem', 'trecho': 'click here'}]",logreg_optuna_v1,4.2
+G13,golpe,alto,0.9996,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'suspended'}, {'tipo': 'solicitacao_dados', 'descricao': 'Solicitação de atualização de dados sensíveis', 'trecho': 'confirm your details'}]",logreg_optuna_v1,3.33
+G14,golpe,alto,0.9747,golpe,[],logreg_optuna_v1,3.83
+G15,golpe,alto,0.9965,golpe,"[{'tipo': 'solicitacao_dados', 'descricao': 'Solicitação de atualização de dados sensíveis', 'trecho': 'update your information'}]",logreg_optuna_v1,4.17
+G16,golpe,alto,0.9992,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'immediately'}, {'tipo': 'solicitacao_dados', 'descricao': 'Solicitação de atualização de dados sensíveis', 'trecho': 'verify your account'}, {'tipo': 'link_suspeito', 'descricao': 'Presença de link na mensagem', 'trecho': 'click here'}]",logreg_optuna_v1,3.33
+G17,golpe,alto,0.9725,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': 'urgent'}]",logreg_optuna_v1,5.16
+G18,golpe,alto,0.9675,golpe,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': '24 hours'}]",logreg_optuna_v1,3.42
+G19,golpe,alto,0.9686,golpe,[],logreg_optuna_v1,3.58
+G20,golpe,alto,0.9953,golpe,[],logreg_optuna_v1,3.87
+L01,legitimo,baixo,0.0254,legitimo,[],logreg_optuna_v1,4.86
+L02,legitimo,alto,0.8411,golpe,[],logreg_optuna_v1,4.01
+L03,legitimo,baixo,0.0002,legitimo,[],logreg_optuna_v1,4.21
+L04,legitimo,medio,0.4814,suspeito,[],logreg_optuna_v1,3.43
+L05,legitimo,baixo,0.104,legitimo,[],logreg_optuna_v1,3.94
+L06,legitimo,baixo,0.1553,legitimo,[],logreg_optuna_v1,3.95
+L07,legitimo,baixo,0.0287,legitimo,[],logreg_optuna_v1,3.58
+L08,legitimo,alto,0.8889,golpe,[],logreg_optuna_v1,3.81
+L09,legitimo,alto,0.9897,golpe,[],logreg_optuna_v1,3.43
+L10,legitimo,baixo,0.1093,legitimo,[],logreg_optuna_v1,3.57
+L11,legitimo,baixo,0.048,legitimo,[],logreg_optuna_v1,4.43
+L12,legitimo,baixo,0.0223,legitimo,[],logreg_optuna_v1,3.2
+L13,legitimo,baixo,0.2475,legitimo,"[{'tipo': 'urgencia_artificial', 'descricao': 'Uso de expressão de urgência', 'trecho': '24 hours'}]",logreg_optuna_v1,3.52
+L14,legitimo,baixo,0.0681,legitimo,[],logreg_optuna_v1,4.2
+L15,legitimo,baixo,0.2492,legitimo,[],logreg_optuna_v1,3.32
+L16,legitimo,baixo,0.0124,legitimo,[],logreg_optuna_v1,3.95
+L17,legitimo,baixo,0.2933,legitimo,[],logreg_optuna_v1,4.0
+L18,legitimo,baixo,0.1661,legitimo,[],logreg_optuna_v1,4.06
+L19,legitimo,medio,0.3335,suspeito,[],logreg_optuna_v1,4.25
+L20,legitimo,baixo,0.2487,legitimo,[],logreg_optuna_v1,3.83

@@ -14,24 +14,27 @@ def test_analisar_email_golpe():
     response = client.post(
         "/analisar-email",
         json={
-            "email_text": "URGENTE: sua conta será bloqueada em 24 horas. "
-            "Clique aqui para atualizar seus dados: http://link-suspeito.com"
+            "email_text": (
+                "URGENT: Your bank account has been suspended due to suspicious activity. "
+                "Verify your account immediately by clicking here or it will be closed within 24 hours."
+            )
         },
     )
     assert response.status_code == 200
     data = response.json()
     assert data["risco"] == "alto"
     assert data["classificacao"] == "golpe"
+    assert data["score"] >= 0.6
+    assert len(data["explicacao"]) > 0
 
 
 def test_analisar_email_legitimo():
     response = client.post(
         "/analisar-email",
-        json={"email_text": "Oi, tudo bem? Vamos marcar aquele café amanhã?"},
+        json={"email_text": "Hi Sarah, thanks for sending the draft. I left a few comments in the shared document. Can we talk tomorrow at 10 to go over them? Best, Mark"},
     )
     assert response.status_code == 200
-    data = response.json()
-    assert data["risco"] == "baixo"
+    assert response.json()["risco"] == "baixo"
 
 
 def test_email_vazio_retorna_erro():
