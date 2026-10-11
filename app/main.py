@@ -41,7 +41,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -79,8 +79,8 @@ def health_check():
 )
 def analisar_email(payload: EmailAnaliseRequest):
     logger.info(
-        "Recebido -> remetente=%r assunto=%r texto=%r",
-        payload.sender, payload.email_subject, payload.email_text,
+        "Recebido -> tem_remetente=%s tem_assunto=%s tamanho=%d caracteres",
+        bool(payload.sender), bool(payload.email_subject), len(payload.email_text),
     )
 
     if not payload.email_text or not payload.email_text.strip():
