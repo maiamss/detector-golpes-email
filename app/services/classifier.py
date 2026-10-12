@@ -11,6 +11,7 @@ import re
 from app.models.schemas import EmailAnaliseResponse, PadraoDetectado, NivelRisco
 from app.core.config import MODEL_PATH, VECTORIZER_PATH, SCALER_PATH, MODEL_VERSION
 from app.services.preprocess import preprocess_text, build_feature_matrix
+from app.services.explicador import explicar_por_modelo  # NOVO (1/3)
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +35,7 @@ def _carregar_artefatos():
 
 
 _modelo, _vectorizer, _scaler = _carregar_artefatos()
+_NOMES = _vectorizer.get_feature_names_out() if _vectorizer is not None else None  # NOVO (2/3)
 
 
 def _modelo_esta_carregado() -> bool:
@@ -131,6 +133,21 @@ def classificar_email(email_text: str, email_subject: str | None = None,
             descricao="Remetente com características suspeitas (domínio/nome)",
             trecho=sender,
         ))
+
+    # --- NOVO (3/3): explicação baseada no modelo, para além das regras fixas ---
+    if score >= 0.3:
+        expl = explicar_por_modelo(
+            X, _modelo, _NOMES, texto_completo, preprocess_text,
+            ignorar={p.tipo for p in padroes},   # não repete o que a regra já disse
+        )
+        for ev in expl.evidencias:
+            padroes.append(PadraoDetectado(tipo=ev.categoria, descricao=ev.descricao, trecho=ev.trecho))
+        if not padroes:
+            padroes.append(PadraoDetectado(
+                tipo="padrao_geral",
+                descricao="O conjunto do vocabulário lembra mensagens de golpe, sem um sinal isolado dominante",
+            ))
+    # --- fim do novo ---
 
     if score >= 0.6:
         risco = NivelRisco.alto
